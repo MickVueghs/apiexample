@@ -61,6 +61,44 @@ router.get('/', (req, res) => {
         + 'Please only delete campus you added'
 
         + '<hr/>'
+
+        + '<h2>/docent</h2>'
+        + 'Returns all docents in the database using .find()'
+
+        + '<hr/>'
+        
+        + '<h2>/docent/create</h2>'
+        + 'Adds one single docent to the database using .create({data})'
+        + '<br><br>'
+        + 'Uses req.body, which means an object is passed'
+        + '<br><br>'
+        + '/api/docent/add adds the campus to the database'
+        + '<br><br>'
+        + 'Since we can`t pass a body in our browser, this path only works when called via code/postman' 
+
+        + '<hr/>'
+
+        + '<h2>/docent/update/:id</h2>'
+        + 'Updates one single docent in the database using .findByIdAndUpdate(objectId, {$set;})'
+        + '<br><br>'
+        + 'Uses req.params.id, which means the id is passed in the url'
+        + '<br><br>'
+        + 'Also uses req.body, which means an object is passed'
+        + '<br><br>'
+        + '/docent/update/6346a60a397af47f5383af47 updates the docent with 6346a60a397af47f5383af47 with the data passed in req.body'
+        + '<br><br>'
+        + 'Since we can`t pass a body in our browser, this path only works when called via code/postman' 
+
+        + '<hr/>'
+
+        + '<h2>/docent/delete/:id</h2>'
+        + 'Deletes one single docent from the database using .findByIdAndDelete(objectId)'
+        + '<br><br>'
+        + 'Uses req.params.id, which means the id is passed in the url'
+        + '<br><br>'
+        + '/docent/delete/6346a60a397af47f5383af47 deletes the docent with id 6346a60a397af47f5383af47 with the data passed in req.body'
+        + '<br><br>'
+        + 'Please only delete docent you added'
     );
 })
 
@@ -69,6 +107,36 @@ router.get('/docent', async (req, res) => {
     try {
         res.json(await Docent.find().populate('campussen').sort('voornaam'));
     } catch(e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
+router.post('/docent/create', async (req, res) => {
+    console.log(`/docent/create route called`);
+    try {
+        res.send(await Docent.create(req.body));
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
+router.put('/docent/update/:id', async (req, res) => {
+    console.log(`/docent/update/:id route called`);
+    try {
+        res.send(await Docent.findByIdAndUpdate(req.params.id, {$set: req.body}));
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
+router.delete('/docent/delete/:id', async (req, res) => {
+    console.log(`/docent/delete/:id route called`);
+    try {
+        res.send(await Docent.findByIdAndDelete(req.params.id));
+    } catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
